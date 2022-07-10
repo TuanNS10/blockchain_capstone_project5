@@ -51,7 +51,7 @@ contract Ownable {
 }
 
 //  TODO's: Create a Pausable contract that inherits from the Ownable contract
-contract payable is Ownable{
+contract Pausable is Ownable{
     //  1) create a private '_paused' variable of type bool
     bool private _paused;
     //  2) create a public setter using the inherited onlyOwner modifier 
@@ -66,6 +66,7 @@ contract payable is Ownable{
     //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
     modifier whenNotPaused() {
         require(_paused == false, "Contract is currently paused");
+        _;
     }
     //  5) create a Paused & Unpaused event that emits the address that triggered the event
     event Paused(address indexed account);
@@ -180,7 +181,7 @@ contract ERC721 is Pausable, ERC165 {
         // TODO require the given address to not be the owner of the tokenId
         require(to != tokenOwner, "Cannot approve to yourself");
         // TODO require the msg sender to be the owner of the contract or isApprovedForAll() to be true
-        require(msg.sender == tokenOwner,isApprovedForAll(tokenOwner, msg.sender), "Caller is not authorized against this token");
+        require(msg.sender == tokenOwner || isApprovedForAll(tokenOwner, msg.sender), "Caller is not authorized against this token");
         // TODO add 'to' address to token approvals
         _tokenApprovals[tokenId] = to;
         // TODO emit Approval Event
@@ -512,11 +513,22 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
     // TODO: create external getter functions for name, symbol, and baseTokenURI
 
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
+    function name() external view returns(string memory){
+        return _name;
+    }
+
+    function symbol() external view returns(string memory) {
+        return _symbol;
+    }
+
+    function baseTokenURI() external view returns(string memory){
+        return _baseTokenURI;
+    }
+
+    function tokenURI(uint256 tokenId) external view returns(string memory) {
         require(_exists(tokenId));
         return _tokenURIs[tokenId];
     }
-
 
     // TODO: Create an internal function to set the tokenURI of a specified tokenId
     // It should be the _baseTokenURI + the tokenId in string form
@@ -524,9 +536,9 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // TIP #2: you can also use uint2str() to convert a uint to a string
         // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
     // require the token exists before setting
-    function setTokenURI(uint256 tokenId) external view returns (string memory) {
-        require(_exists(tokenId));
-        return _tokenURIs[tokenId];
+    function setTokenURI(uint256 tokenId) internal {
+        require(_exists(tokenId), "Token does not exist");
+        _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
 
 }
