@@ -51,7 +51,7 @@ contract SolnSquareVerifier is CustomERC721Token {
     whenNotPaused
     public
     {
-        bytes32 key = generateKey(a, b, c, inputs);
+        bytes32 key = keccak256(abi.encodePacked(a, b, c, inputs));
         require(!_existSolution(key));
         require(_squareVerifier.verifyTx(a,b,c,inputs));
         addSolution(tokenId, to, key);
