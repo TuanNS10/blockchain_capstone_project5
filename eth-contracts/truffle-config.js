@@ -21,7 +21,7 @@
  const HDWallet = require('truffle-hdwallet-provider');
  const infuraKey = "eb7c5c4b3433400090097652fea5ac01";
  
- const mnemonic = "Ensure you do not use it on production blockchains, or else you risk losing funds";
+ const mnemonic = "Ensure you do not use it on production blockchains, or else you risk sing funds";
  
  module.exports = {
    /**
