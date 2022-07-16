@@ -83,4 +83,4 @@ eth-contracts/build/contracts/SquareVerifier.json
 eth-contracts/build/contracts/SolnSquareVerifier.json
 ```
 # OpenSea marketplace
-https://testnets.opensea.io/collection/vietnamese-cuisine-200899
+https://testnets.opensea.io/collection/real-estate-200899
